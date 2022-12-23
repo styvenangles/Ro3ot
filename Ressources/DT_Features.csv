@@ -1,0 +1,14 @@
+,VariableTypes,Value,,,
+Hp,Integer,"""500;100;250;60""",,,
+AttackSpeed,Float,"""2;1;0.5;1.25""",,,
+AttackDamage,Float,"""15;30;60;5""",,,
+AttackRange,Float,"""1;1;1;1""",,,
+CDCP1,Float,,A étudier,Petit > Moyen,CoulDownCapacityPetit1
+CDCP2,Float,,A étudier,Petit > Gros,
+CDCM1,Float,,A étudier,Moyen > Petit,
+CDCM2,Float,,A étudier,Moyen > Gros,
+CDCG1,Float,,A étudier,Gros > Petit,
+CDCG2,Float,,A étudier,Gros > Moyen,
+MS,Float,"""1.25;1;0.75;1""",,,MouvementSpeedPetit
+WaveTime,Float,30,,,
+WaveEnemySpawn,Float,5,,,
