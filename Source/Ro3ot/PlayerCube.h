@@ -38,6 +38,8 @@ public:
 	void SpawnProjectile(FVector Start, FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
 
+	UFUNCTION(BlueprintCallable)
+		void TakeDamage(int dmg);
 
 protected:
 	// Called when the game starts or when spawned
@@ -63,6 +65,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		UArrowComponent* ProjectileArrow;
 
+	int health;
+
 private:
+
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 };

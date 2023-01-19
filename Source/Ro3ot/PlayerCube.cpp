@@ -3,12 +3,16 @@
 
 #include "PlayerCube.h"
 
+#include "Components/CapsuleComponent.h"
+
 // Sets default values
 APlayerCube::APlayerCube()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	this->GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &APlayerCube::OnHit);
+	health = 3.f;
 	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
@@ -76,4 +80,20 @@ void APlayerCube::HitScan(FVector Start, FVector Direction)
 
 }
 
+void APlayerCube::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if (OtherActor->GetClass() == Settings.ProjectileClass)
+	{
+		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
+		TakeDamage(projectileInstance->Damage);
+	}
+}
 
+void APlayerCube::TakeDamage(int dmg)
+{
+	health -= dmg;
+	if (health <= 0)
+	{
+		Destroy();
+	}
+}

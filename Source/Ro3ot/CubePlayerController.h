@@ -27,6 +27,6 @@ private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
 	void Shoot();
-
+	
 	APlayerCube* Cube = nullptr;
 };

@@ -9,9 +9,10 @@ ACubeEnemyPawn::ACubeEnemyPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	health = 50;
+	health = 3;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->OnComponentHit.AddDynamic(this, &ACubeEnemyPawn::OnHit);
 
 	RootComponent = Mesh;
 	ProjectileArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileArrow"));
@@ -82,10 +83,19 @@ void ACubeEnemyPawn::SpawnProjectile(FVector Direction)
 	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
 }
 
+void ACubeEnemyPawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	if(OtherActor->GetClass() == Settings.ProjectileClass)
+	{
+		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
+		TakeDamage(projectileInstance->Damage);
+	}
+}
+
+
 void ACubeEnemyPawn::TakeDamage(int dmg)
 {
 	health -= dmg;
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Life: %i"), health);
 	if (health <= 0)
 	{
 		Destroy();
