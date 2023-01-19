@@ -18,7 +18,7 @@ ACubeEnemyPawn::ACubeEnemyPawn()
 	ProjectileArrow->SetupAttachment(RootComponent);
 
 	ProjectileLocation = CreateDefaultSubobject<USceneComponent>("ProjectileLocation");
-	ProjectileLocation->SetupAttachment(RootComponent);
+	ProjectileLocation->SetupAttachment(ProjectileArrow);
 }
 
 // Called when the game starts or when spawned
@@ -45,12 +45,11 @@ void ACubeEnemyPawn::Shoot()
 {
 	FVector Direction = this->GetActorForwardVector();
 	FVector Start = this->GetActorLocation() + (Direction * 100.0f);
-	FVector End = Start + Direction * InteractionMaxDistance;
 
-	if (IsValid(ProjectileLocation))
+	if (Settings.ProjectileClass != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Shoot"));
-		SpawnProjectile(Start, Direction);
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Enemy shooting!"));
+		SpawnProjectile(Direction);
 	}
 	else
 	{
@@ -73,15 +72,14 @@ void ACubeEnemyPawn::HitScan(FVector Start, FVector Direction)
 
 }
 
-void ACubeEnemyPawn::SpawnProjectile(FVector Start, FVector Direction)
+void ACubeEnemyPawn::SpawnProjectile(FVector Direction)
 {
 	FActorSpawnParameters Params;
-	FVector Location = ProjectileLocation->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
+
+	FVector Location = ProjectileLocation->GetComponentLocation();
 	FRotator Rotation = Direction.Rotation();
-	UWorld* world = GetWorld();
-	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	world->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Shoot: %s"), *Location.ToString());
+
+	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
 }
 
 void ACubeEnemyPawn::TakeDamage(int dmg)

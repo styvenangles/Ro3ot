@@ -41,7 +41,7 @@ void AFPS_Projectile::Tick(float DeltaTime)
 
 void AFPS_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
-	LifeTimeEnded();
+	
 }
 
 void AFPS_Projectile::OnStop(const FHitResult& Hit)
@@ -51,5 +51,5 @@ void AFPS_Projectile::OnStop(const FHitResult& Hit)
 
 void AFPS_Projectile::LifeTimeEnded()
 {
-	Destroy();
+
 }

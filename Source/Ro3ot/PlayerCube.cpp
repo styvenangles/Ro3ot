@@ -41,9 +41,8 @@ void APlayerCube::SpawnProjectile(FVector Start, FVector Direction)
 	FActorSpawnParameters Params;
 	FVector Location = ProjectileLocation->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
 	FRotator Rotation = Direction.Rotation();
-	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+
 	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
-	UE_LOG(LogTemp, Warning, TEXT("Player Shoot: %s"), *Location.ToString());
 }
 
 void APlayerCube::Shoot()

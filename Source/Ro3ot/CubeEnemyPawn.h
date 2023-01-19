@@ -41,7 +41,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TakeDamage(int dmg);
 
-	void SpawnProjectile(FVector Start, FVector Direction);
+	void SpawnProjectile(FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
 
 protected:
