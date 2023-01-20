@@ -12,7 +12,7 @@ APlayerCube::APlayerCube()
 	PrimaryActorTick.bCanEverTick = true;
 
 	this->GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &APlayerCube::OnHit);
-	health = 3.f;
+	health = 3;
 	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.
