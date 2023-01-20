@@ -20,11 +20,11 @@ void ACubePlayerController::Tick(float DeltaSeconds)
 	Super::PlayerTick(DeltaSeconds);
 	
 	ACharacter* playerCube= UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-	Cube = Cast<APlayerCube>(playerCube);
 
 	FVector mouseLocation, mouseDirection;
 	this->DeprojectMousePositionToWorld(mouseLocation, mouseDirection);
-	if (Cube != nullptr)
+	if (playerCube != nullptr)
+		Cube = Cast<APlayerCube>(playerCube);
 	{
 		FRotator currentCharacterRotation = Cube->GetActorRotation();
 		FRotator targetRotation = mouseDirection.Rotation();
