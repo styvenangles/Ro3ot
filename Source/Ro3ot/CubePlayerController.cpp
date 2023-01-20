@@ -2,16 +2,36 @@
 
 
 #include "CubePlayerController.h"
+#include "Kismet/GameplayStatics.h"
 
 ACubePlayerController::ACubePlayerController()
 {
-
+	DefaultMouseCursor = EMouseCursor::Default;
 }
 
 void ACubePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 	Cube = Cast<APlayerCube>(GetPawn());
+}
+
+void ACubePlayerController::Tick(float DeltaSeconds)
+{
+	Super::PlayerTick(DeltaSeconds);
+	
+	ACharacter* playerCube= UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	Cube = Cast<APlayerCube>(playerCube);
+
+	FVector mouseLocation, mouseDirection;
+	this->DeprojectMousePositionToWorld(mouseLocation, mouseDirection);
+	if (Cube != nullptr)
+	{
+		FRotator currentCharacterRotation = Cube->GetActorRotation();
+		FRotator targetRotation = mouseDirection.Rotation();
+
+		FRotator newRotation = FRotator(currentCharacterRotation.Pitch, targetRotation.Yaw, currentCharacterRotation.Roll);
+		Cube->SetActorRotation(newRotation);
+	}
 }
 
 void ACubePlayerController::SetupInputComponent()

@@ -37,9 +37,8 @@ public:
 	void Shoot();
 	void SpawnProjectile(FVector Start, FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
-
-	UFUNCTION(BlueprintCallable)
-		void TakeDamage(int dmg);
+	
+	void SubDamage(int dmg);
 
 protected:
 	// Called when the game starts or when spawned

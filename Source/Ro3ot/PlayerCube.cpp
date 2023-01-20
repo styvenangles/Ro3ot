@@ -15,12 +15,18 @@ APlayerCube::APlayerCube()
 	health = 3.f;
 	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 
+	// Don't rotate when the controller rotates. Let that just affect the camera.
+	bUseControllerRotationPitch = true;
+	bUseControllerRotationYaw = true;
+	bUseControllerRotationRoll = true;
+
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
 	CameraBoom->TargetArmLength = 800.0f; // The camera follows at this distance behind the character
 	CameraBoom->SetRelativeRotation(FRotator(-60.f, 0.f, 0.f));
 	CameraBoom->bDoCollisionTest = false; // Don't want to pull camera in when it collides with level
+	CameraBoom->bUsePawnControlRotation = false; // Don't want arm to rotate when character does
 
 	// Create a follow camera	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
@@ -85,11 +91,11 @@ void APlayerCube::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	if (OtherActor->GetClass() == Settings.ProjectileClass)
 	{
 		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
-		TakeDamage(projectileInstance->Damage);
+		SubDamage(projectileInstance->Damage);
 	}
 }
 
-void APlayerCube::TakeDamage(int dmg)
+void APlayerCube::SubDamage(int dmg)
 {
 	health -= dmg;
 	if (health <= 0)
