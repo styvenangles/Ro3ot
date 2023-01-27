@@ -87,10 +87,13 @@ void APlayerCube::HitScan(FVector Start, FVector Direction)
 
 void APlayerCube::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (OtherActor->GetClass() == Settings.ProjectileClass)
+	AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
+	if (projectileInstance != nullptr)
 	{
-		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
-		SubDamage(projectileInstance->Damage);
+		if (projectileInstance->PSettings.FriendlyClass != this->GetClass())
+		{
+			SubDamage(projectileInstance->Damage);
+		}
 	}
 }
 
