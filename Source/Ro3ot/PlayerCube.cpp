@@ -49,7 +49,7 @@ void APlayerCube::BeginPlay()
 void APlayerCube::SpawnProjectile(FVector Start, FVector Direction)
 {
 	FActorSpawnParameters Params;
-	FVector Location = ProjectileLocation->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
+	FVector Location = ProjectileLocation->GetComponentLocation();
 	FRotator Rotation = Direction.Rotation();
 
 	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);

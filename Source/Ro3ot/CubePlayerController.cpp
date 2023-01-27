@@ -3,10 +3,14 @@
 
 #include "CubePlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ACubePlayerController::ACubePlayerController()
 {
 	DefaultMouseCursor = EMouseCursor::Default;
+	bShowMouseCursor = true;
+	bEnableClickEvents = true;
+	bEnableMouseOverEvents = true;
 }
 
 void ACubePlayerController::BeginPlay()
@@ -18,8 +22,8 @@ void ACubePlayerController::BeginPlay()
 void ACubePlayerController::Tick(float DeltaSeconds)
 {
 	Super::PlayerTick(DeltaSeconds);
-	
-	ACharacter* playerCube= UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+
+	/*ACharacter* playerCube= UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
 	FVector mouseLocation, mouseDirection;
 	this->DeprojectMousePositionToWorld(mouseLocation, mouseDirection);
@@ -27,11 +31,14 @@ void ACubePlayerController::Tick(float DeltaSeconds)
 		Cube = Cast<APlayerCube>(playerCube);
 	{
 		FRotator currentCharacterRotation = Cube->GetActorRotation();
-		FRotator targetRotation = mouseDirection.Rotation();
-
+		FVector currentCharacterLocation = Cube->GetActorLocation();
+		FRotator targetRotation = mouseDirection.Rotation() - mouseLocation.Rotation();
 		FRotator newRotation = FRotator(currentCharacterRotation.Pitch, targetRotation.Yaw, currentCharacterRotation.Roll);
 		Cube->SetActorRotation(newRotation);
-	}
+
+		FRotator lastRotation = Cube->GetActorRotation();
+		UE_LOG(LogTemp, Warning, TEXT("Player rotation : %f - Mouse rotation : %f - MouseLocation : %f"), lastRotation.Yaw, targetRotation.Yaw, mouseLocation.Z);
+	}*/
 }
 
 void ACubePlayerController::SetupInputComponent()

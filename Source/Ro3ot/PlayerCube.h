@@ -37,7 +37,9 @@ public:
 	void Shoot();
 	void SpawnProjectile(FVector Start, FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
-	
+
+	int GetHp() { return health; };
+
 	void SubDamage(int dmg);
 
 protected:

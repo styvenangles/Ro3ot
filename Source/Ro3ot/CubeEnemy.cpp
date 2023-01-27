@@ -19,6 +19,7 @@ ACubeEnemy::ACubeEnemy()
 		mesh = GetMesh();
 		mesh->SetSkeletalMesh(MeshContainer.Object);
 		mesh->SetWorldScale3D(FVector(2.f, 2.f, 6.f));
+		mesh->SetWorldLocation(FVector(0.f, 0.f, -70.f));
 	}
 
 
