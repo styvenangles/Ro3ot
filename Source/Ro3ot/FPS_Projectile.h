@@ -7,6 +7,18 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "FPS_Projectile.generated.h"
 
+USTRUCT(BlueprintType)
+struct FProjectileSettings
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		TSubclassOf <AActor> FriendlyClass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		TSubclassOf <AActor> EnemyClass = nullptr;
+};
+
 UCLASS()
 class RO3OT_API AFPS_Projectile : public AActor
 {
@@ -27,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Damage")
 		int Damage = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		FProjectileSettings PSettings = FProjectileSettings();
 
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent *OtherComponent, FVector NormalImpulse, const FHitResult& Hit);

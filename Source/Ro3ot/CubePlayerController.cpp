@@ -2,6 +2,8 @@
 
 
 #include "CubePlayerController.h"
+
+#include "GameFramework/PawnMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -37,7 +39,6 @@ void ACubePlayerController::Tick(float DeltaSeconds)
 		Cube->SetActorRotation(newRotation);
 
 		FRotator lastRotation = Cube->GetActorRotation();
-		UE_LOG(LogTemp, Warning, TEXT("Player rotation : %f - Mouse rotation : %f - MouseLocation : %f"), lastRotation.Yaw, targetRotation.Yaw, mouseLocation.Z);
 	}*/
 }
 
