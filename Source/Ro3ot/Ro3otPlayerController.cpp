@@ -124,7 +124,6 @@ void ARo3otPlayerController::InRangeEnemy_Implementation(AActor* Enemy, bool isP
 	ACharacter* robotCharacter = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 	robotPC = Cast<ARo3otCharacter>(robotCharacter);
 	APawn* const MyPawn = GetPawn();
-	//GEngine->AddOnScreenDebugMessage(-1, 60.0f, FColor::Orange, FString::Printf(TEXT("Hit : %s"), *Enemy->GetName()));
 	if (Enemy != nullptr && Enemy == selectedActor)
 	{
 		robotPC->isInRangeToAttack = true;

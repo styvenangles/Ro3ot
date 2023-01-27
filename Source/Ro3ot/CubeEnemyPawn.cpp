@@ -44,24 +44,22 @@ void ACubeEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACubeEnemyPawn::Shoot()
 {
-	FVector Direction = this->GetActorForwardVector();
+	/*FVector Direction = this->GetActorForwardVector();
 	FVector Start = this->GetActorLocation() + (Direction * 100.0f);
 
 	if (Settings.ProjectileClass != nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Enemy shooting!"));
 		SpawnProjectile(Direction);
 	}
 	else
 	{
 		HitScan(Start, Direction);
-	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Direction.ToString());
+	}*/
 }
 
 void ACubeEnemyPawn::HitScan(FVector Start, FVector Direction)
 {
-	FHitResult Hit = FHitResult();
+	/*FHitResult Hit = FHitResult();
 
 	FVector End = Start + (Direction * Settings.MaxDistance);
 
@@ -69,31 +67,31 @@ void ACubeEnemyPawn::HitScan(FVector Start, FVector Direction)
 
 	FVector HitLocation = Hit.bBlockingHit ? Hit.Location : End;
 
-	DrawDebugSphere(GetWorld(), HitLocation, 10.f, 8, FColor::Red, false, 1.f);
+	DrawDebugSphere(GetWorld(), HitLocation, 10.f, 8, FColor::Red, false, 1.f);*/
 
 }
 
 void ACubeEnemyPawn::SpawnProjectile(FVector Direction)
 {
-	FActorSpawnParameters Params;
+	/*FActorSpawnParameters Params;
 
 	FVector Location = ProjectileLocation->GetComponentLocation();
 	FRotator Rotation = Direction.Rotation();
 
-	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
+	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);*/
 }
 
 void ACubeEnemyPawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if(OtherActor->GetClass() == Settings.ProjectileClass)
+	/*if(OtherActor->GetClass() == Settings.ProjectileClass)
 	{
 		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
-		TakeDamage(projectileInstance->Damage);
-	}
+		SubDamage(projectileInstance->Damage);
+	}*/
 }
 
 
-void ACubeEnemyPawn::TakeDamage(int dmg)
+void ACubeEnemyPawn::SubDamage(int dmg)
 {
 	health -= dmg;
 	if (health <= 0)

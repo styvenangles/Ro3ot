@@ -69,7 +69,6 @@ void APlayerCube::Shoot()
 	{
 		HitScan(Start, Direction);
 	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *this->GetActorLocation().ToString());
 }
 
 void APlayerCube::HitScan(FVector Start, FVector Direction)
