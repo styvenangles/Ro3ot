@@ -9,16 +9,17 @@ ACubeEnemyPawn::ACubeEnemyPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	health = 50;
+	health = 3;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->OnComponentHit.AddDynamic(this, &ACubeEnemyPawn::OnHit);
 
 	RootComponent = Mesh;
 	ProjectileArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileArrow"));
 	ProjectileArrow->SetupAttachment(RootComponent);
 
 	ProjectileLocation = CreateDefaultSubobject<USceneComponent>("ProjectileLocation");
-	ProjectileLocation->SetupAttachment(RootComponent);
+	ProjectileLocation->SetupAttachment(ProjectileArrow);
 }
 
 // Called when the game starts or when spawned
@@ -43,25 +44,22 @@ void ACubeEnemyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACubeEnemyPawn::Shoot()
 {
-	FVector Direction = this->GetActorForwardVector();
+	/*FVector Direction = this->GetActorForwardVector();
 	FVector Start = this->GetActorLocation() + (Direction * 100.0f);
-	FVector End = Start + Direction * InteractionMaxDistance;
 
-	if (IsValid(ProjectileLocation))
+	if (Settings.ProjectileClass != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Shoot"));
-		SpawnProjectile(Start, Direction);
+		SpawnProjectile(Direction);
 	}
 	else
 	{
 		HitScan(Start, Direction);
-	}
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *Direction.ToString());
+	}*/
 }
 
 void ACubeEnemyPawn::HitScan(FVector Start, FVector Direction)
 {
-	FHitResult Hit = FHitResult();
+	/*FHitResult Hit = FHitResult();
 
 	FVector End = Start + (Direction * Settings.MaxDistance);
 
@@ -69,25 +67,33 @@ void ACubeEnemyPawn::HitScan(FVector Start, FVector Direction)
 
 	FVector HitLocation = Hit.bBlockingHit ? Hit.Location : End;
 
-	DrawDebugSphere(GetWorld(), HitLocation, 10.f, 8, FColor::Red, false, 1.f);
+	DrawDebugSphere(GetWorld(), HitLocation, 10.f, 8, FColor::Red, false, 1.f);*/
 
 }
 
-void ACubeEnemyPawn::SpawnProjectile(FVector Start, FVector Direction)
+void ACubeEnemyPawn::SpawnProjectile(FVector Direction)
 {
-	FActorSpawnParameters Params;
-	FVector Location = ProjectileLocation->GetComponentLocation() + FVector(100.f, 0.f, 0.f);
+	/*FActorSpawnParameters Params;
+
+	FVector Location = ProjectileLocation->GetComponentLocation();
 	FRotator Rotation = Direction.Rotation();
-	UWorld* world = GetWorld();
-	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	world->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Shoot: %s"), *Location.ToString());
+
+	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);*/
 }
 
-void ACubeEnemyPawn::TakeDamage(int dmg)
+void ACubeEnemyPawn::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	/*if(OtherActor->GetClass() == Settings.ProjectileClass)
+	{
+		AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
+		SubDamage(projectileInstance->Damage);
+	}*/
+}
+
+
+void ACubeEnemyPawn::SubDamage(int dmg)
 {
 	health -= dmg;
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Life: %i"), health);
 	if (health <= 0)
 	{
 		Destroy();

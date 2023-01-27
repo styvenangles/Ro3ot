@@ -10,7 +10,7 @@
 #include "Components/ArrowComponent.h"
 #include "CubeEnemyPawn.generated.h"
 
-USTRUCT(BlueprintType)
+/*USTRUCT(BlueprintType)
 struct FEnemyShootSettings
 {
 	GENERATED_USTRUCT_BODY()
@@ -23,7 +23,7 @@ struct FEnemyShootSettings
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		TSubclassOf <AFPS_Projectile> ProjectileClass = nullptr;
-};
+};*/
 
 
 UCLASS()
@@ -39,9 +39,9 @@ public:
 	void Shoot();
 
 	UFUNCTION(BlueprintCallable)
-		void TakeDamage(int dmg);
+		void SubDamage(int dmg);
 
-	void SpawnProjectile(FVector Start, FVector Direction);
+	void SpawnProjectile(FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
 
 protected:
@@ -54,8 +54,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 		USceneComponent* ProjectileLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		FEnemyShootSettings Settings = FEnemyShootSettings();
+	/*UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		FEnemyShootSettings Settings = FEnemyShootSettings();*/
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		float InteractionMaxDistance = 10000.0f;
@@ -73,4 +73,9 @@ public:
 
 private:
 	int health;
+
+	AFPS_Projectile* projectile = nullptr;
+
+	UFUNCTION()
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 };
