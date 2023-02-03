@@ -15,8 +15,11 @@ struct FEnemyShootSettings
 {
 	GENERATED_USTRUCT_BODY()
 
-		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		float FireRate = 4.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		int FireProjectileNbr = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		float MaxDistance = 10000.0f;
@@ -50,6 +53,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 		USceneComponent* ProjectileLocation;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+		USceneComponent* ProjectileLocation2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+		USceneComponent* ProjectileLocation3;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		FEnemyShootSettings Settings = FEnemyShootSettings();
 
@@ -60,18 +69,23 @@ protected:
 		UArrowComponent* ProjectileArrow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+		TArray<FVector> multipleProjectileSpawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		bool CanShoot = false;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	int health;
 	
 
 private:
-	int health;
 	float FireTimer = 0.0f;
 	AFPS_Projectile* projectile = nullptr;
 
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+		void OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

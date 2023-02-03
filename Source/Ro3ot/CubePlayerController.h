@@ -17,17 +17,17 @@ class RO3OT_API ACubePlayerController : public APlayerController
 
 public:
 	ACubePlayerController();
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Player, meta = (AllowPrivateAccess = "true"))
+	APlayerCube* Cube = nullptr;
 protected:
 
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	virtual void Tick(float DeltaSeconds) override;
 
 private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
 	void Shoot();
 	
-	APlayerCube* Cube = nullptr;
 };

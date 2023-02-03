@@ -20,7 +20,7 @@ void AFPS_Projectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Mesh->OnComponentHit.AddDynamic(this, &AFPS_Projectile::OnHit);
+	Mesh->OnComponentBeginOverlap.AddDynamic(this, &AFPS_Projectile::OnActorBeginOverlap);
 
 	FVector BaseVelocity = ProjectileDirection * ProjectileSpeed;
 	ProjectileComp->SetVelocityInLocalSpace(BaseVelocity);
@@ -39,10 +39,19 @@ void AFPS_Projectile::Tick(float DeltaTime)
 
 }
 
-void AFPS_Projectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
+void AFPS_Projectile::OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Destroy();
+	for (int i = 0; i < PSettings.FriendlyClass.Num(); i++)
+	{
+		/*UE_LOG(LogTemp, Warning, TEXT("OverlapedActor : %s"), *OtherActor->GetClass()->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("FriendlyActor : %s"), *PSettings.FriendlyClass[i]->GetName());*/
+		if (PSettings.EnemyClass[i] == OtherActor->GetClass())
+		{
+			Destroy();
+		}
+	}
 }
+
 
 void AFPS_Projectile::OnStop(const FHitResult& Hit)
 {

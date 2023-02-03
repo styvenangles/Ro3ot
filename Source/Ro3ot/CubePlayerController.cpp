@@ -21,26 +21,6 @@ void ACubePlayerController::BeginPlay()
 	Cube = Cast<APlayerCube>(GetPawn());
 }
 
-void ACubePlayerController::Tick(float DeltaSeconds)
-{
-	Super::PlayerTick(DeltaSeconds);
-
-	/*ACharacter* playerCube= UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
-
-	FVector mouseLocation, mouseDirection;
-	this->DeprojectMousePositionToWorld(mouseLocation, mouseDirection);
-	if (playerCube != nullptr)
-		Cube = Cast<APlayerCube>(playerCube);
-	{
-		FRotator currentCharacterRotation = Cube->GetActorRotation();
-		FVector currentCharacterLocation = Cube->GetActorLocation();
-		FRotator targetRotation = mouseDirection.Rotation() - mouseLocation.Rotation();
-		FRotator newRotation = FRotator(currentCharacterRotation.Pitch, targetRotation.Yaw, currentCharacterRotation.Roll);
-		Cube->SetActorRotation(newRotation);
-
-		FRotator lastRotation = Cube->GetActorRotation();
-	}*/
-}
 
 void ACubePlayerController::SetupInputComponent()
 {
@@ -54,19 +34,21 @@ void ACubePlayerController::SetupInputComponent()
 
 void ACubePlayerController::MoveHorizontal(float value)
 {
-	if (Cube != nullptr) {
-		FVector Direction = Cube->GetActorRightVector();
+	/*if (Cube != nullptr) {
+		USpringArmComponent* cam = Cube->CameraBoom;
+		FVector Direction = cam->GetRightVector();
 		Cube->AddMovementInput(Direction, value);
-	}
+	}*/
 }
 
 void ACubePlayerController::MoveVertical(float value)
 {
-	if (Cube != nullptr)
+	/*if (Cube != nullptr)
 	{
-		FVector Direction = Cube->GetActorForwardVector();
+		USpringArmComponent* cam = Cube->CameraBoom;
+		FVector Direction = cam->GetForwardVector();
 		Cube->AddMovementInput(Direction, value);
-	}
+	}*/
 }
 
 void ACubePlayerController::Shoot()

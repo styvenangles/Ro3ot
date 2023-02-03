@@ -11,7 +11,7 @@ APlayerCube::APlayerCube()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	this->GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &APlayerCube::OnHit);
+	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCube::OnActorBeginOverlap);
 	health = 3;
 	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 
@@ -85,23 +85,31 @@ void APlayerCube::HitScan(FVector Start, FVector Direction)
 
 }
 
-void APlayerCube::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+
+void APlayerCube::OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
 	if (projectileInstance != nullptr)
 	{
-		if (projectileInstance->PSettings.FriendlyClass != this->GetClass())
+		for (int i = 0; i < projectileInstance->PSettings.EnemyClass.Num(); i++)
 		{
-			SubDamage(projectileInstance->Damage);
+			if (projectileInstance->PSettings.EnemyClass[i] == this->GetClass())
+			{
+				SubDamage(projectileInstance->Damage);
+				return;
+			}
 		}
 	}
 }
 
 void APlayerCube::SubDamage(int dmg)
 {
-	health -= dmg;
-	if (health <= 0)
+	if (!invulnerabiltyFrame)
 	{
-		Destroy();
+		health -= dmg;
+		if (health <= 0)
+		{
+			Destroy();
+		}
 	}
 }

@@ -3,14 +3,15 @@
 
 #include "CubeEnemy.h"
 
+#include "Kismet/KismetStringLibrary.h"
+
 // Sets default values
 ACubeEnemy::ACubeEnemy()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	this->GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &ACubeEnemy::OnHit);
-	health = 3;
+	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACubeEnemy::OnActorBeginOverlap);
 
 	USkeletalMeshComponent* mesh;
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MeshContainer(TEXT("/Script/Engine.SkeletalMesh'/Engine/EngineMeshes/SkeletalCube.SkeletalCube'"));
@@ -28,6 +29,12 @@ ACubeEnemy::ACubeEnemy()
 
 	ProjectileLocation = CreateDefaultSubobject<USceneComponent>("ProjectileLocation");
 	ProjectileLocation->SetupAttachment(ProjectileArrow);
+
+	ProjectileLocation2 = CreateDefaultSubobject<USceneComponent>("ProjectileLocation2");
+	ProjectileLocation2->SetupAttachment(ProjectileArrow);
+
+	ProjectileLocation3 = CreateDefaultSubobject<USceneComponent>("ProjectileLocation3");
+	ProjectileLocation3->SetupAttachment(ProjectileArrow);
 }
 
 // Called when the game starts or when spawned
@@ -89,19 +96,52 @@ void ACubeEnemy::SpawnProjectile(FVector Direction)
 	FActorSpawnParameters Params;
 
 	FVector Location = ProjectileLocation->GetComponentLocation();
+	FVector Location2 = ProjectileLocation2->GetComponentLocation();
+	FVector Location3 = ProjectileLocation3->GetComponentLocation();
 	FRotator Rotation = Direction.Rotation();
 
-	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
+	if (Settings.FireProjectileNbr == 1)
+	{
+		GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
+	}
+	else if (Settings.FireProjectileNbr == 2)
+	{
+		multipleProjectileSpawn.Add(Location);
+		multipleProjectileSpawn.Add(Location2);
+
+		for (int i = 0; i < Settings.FireProjectileNbr; i++)
+		{
+			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], Rotation, Params);
+		}
+		multipleProjectileSpawn.Empty();
+	}
+	else
+	{
+		multipleProjectileSpawn.Add(Location);
+		multipleProjectileSpawn.Add(Location2);
+		multipleProjectileSpawn.Add(Location3);
+
+		for (int i = 0; i < Settings.FireProjectileNbr; i++)
+		{
+			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], Rotation, Params);
+		}
+		multipleProjectileSpawn.Empty();
+	}
+
 }
 
-void ACubeEnemy::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ACubeEnemy::OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AFPS_Projectile* projectileInstance = Cast<AFPS_Projectile>(OtherActor);
 	if (projectileInstance != nullptr)
 	{
-		if (projectileInstance->PSettings.FriendlyClass != this->GetClass())
+		for (int i = 0; i < projectileInstance->PSettings.EnemyClass.Num(); i++)
 		{
-			SubDamage(projectileInstance->Damage);
+			if (projectileInstance->PSettings.EnemyClass[i] == this->GetClass())
+			{
+				SubDamage(projectileInstance->Damage);
+				return;
+			}
 		}
 	}
 }

@@ -13,10 +13,10 @@ struct FProjectileSettings
 	GENERATED_USTRUCT_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		TSubclassOf <AActor> FriendlyClass = nullptr;
+		TArray<TSubclassOf <AActor>> FriendlyClass = { nullptr , nullptr, nullptr};
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		TSubclassOf <AActor> EnemyClass = nullptr;
+		TArray<TSubclassOf <AActor>> EnemyClass = { nullptr, nullptr, nullptr };
 };
 
 UCLASS()
@@ -44,7 +44,7 @@ public:
 		FProjectileSettings PSettings = FProjectileSettings();
 
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent *OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
+		void OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 		void OnStop(const FHitResult& Hit);
