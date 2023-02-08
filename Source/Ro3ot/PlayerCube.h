@@ -38,7 +38,8 @@ public:
 	void SpawnProjectile(FVector Start, FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
 
-	int GetHp() { return health; };
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		int GetHp() { return health; };
 
 	void SubDamage(int dmg);
 	/** Camera boom positioning the camera behind the character */
@@ -49,7 +50,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 		bool invulnerabiltyFrame = false;
 
 protected:

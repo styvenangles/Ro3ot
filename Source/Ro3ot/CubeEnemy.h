@@ -43,13 +43,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void SubDamage(int dmg);
 
-	void SpawnProjectile(FVector Direction);
+	void SpawnProjectile();
 	void HitScan(FVector Start, FVector Direction);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
+		USceneComponent* ProjectileLocationOrigin;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 		USceneComponent* ProjectileLocation;
 
@@ -70,6 +72,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		TArray<FVector> multipleProjectileSpawn;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+		TArray<FRotator> multipleProjectileRotation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		bool CanShoot = false;
