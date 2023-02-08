@@ -2,6 +2,8 @@
 
 
 #include "CubeEnemy.h"
+#include "PlayerCube.h"
+#include "Kismet/GameplayStatics.h"
 
 #include "Kismet/KismetStringLibrary.h"
 
@@ -14,18 +16,22 @@ ACubeEnemy::ACubeEnemy()
 	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ACubeEnemy::OnActorBeginOverlap);
 
 	USkeletalMeshComponent* mesh;
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MeshContainer(TEXT("/Script/Engine.SkeletalMesh'/Engine/EngineMeshes/SkeletalCube.SkeletalCube'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh>MeshContainer(TEXT("/Script/Engine.SkeletalMesh'/Game/Blueprint/Enemies/Rig/Ro3ot_Mechant_Rig.Ro3ot_Mechant_Rig'"));
 	if (MeshContainer.Object)
 	{
 		mesh = GetMesh();
 		mesh->SetSkeletalMesh(MeshContainer.Object);
-		mesh->SetWorldScale3D(FVector(2.f, 2.f, 6.f));
+		mesh->SetWorldScale3D(FVector(1.25f, 1.25f, 1.25f));
 		mesh->SetWorldLocation(FVector(0.f, 0.f, -70.f));
+		mesh->SetWorldRotation(FRotator(0.f, -90.f, 0.f));
 	}
 
 
 	ProjectileArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileArrow"));
 	ProjectileArrow->SetupAttachment(RootComponent);
+
+	ProjectileLocationOrigin = CreateDefaultSubobject<USceneComponent>("ProjectileLocationOrigin");
+	ProjectileLocationOrigin->SetupAttachment(ProjectileArrow);
 
 	ProjectileLocation = CreateDefaultSubobject<USceneComponent>("ProjectileLocation");
 	ProjectileLocation->SetupAttachment(ProjectileArrow);
@@ -65,7 +71,7 @@ void ACubeEnemy::Shoot()
 	{
 		if (Settings.ProjectileClass != nullptr)
 		{
-			SpawnProjectile(Direction);
+			SpawnProjectile();
 		}
 		else
 		{
@@ -91,14 +97,28 @@ void ACubeEnemy::HitScan(FVector Start, FVector Direction)
 
 }
 
-void ACubeEnemy::SpawnProjectile(FVector Direction)
+void ACubeEnemy::SpawnProjectile()
 {
 	FActorSpawnParameters Params;
 
+	ACharacter* charA = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+
+	FVector LocationOrigin = ProjectileLocationOrigin->GetComponentLocation();
 	FVector Location = ProjectileLocation->GetComponentLocation();
 	FVector Location2 = ProjectileLocation2->GetComponentLocation();
 	FVector Location3 = ProjectileLocation3->GetComponentLocation();
+
+	FVector Direction = this->GetActorForwardVector();
+	FVector Direction2 = (Location2 - LocationOrigin) + this->GetActorForwardVector();
+	FVector Direction3 = (Location3 - LocationOrigin) + this->GetActorForwardVector();
+
+	Direction.Normalize();
+	Direction2.Normalize();
+	Direction3.Normalize();
+
 	FRotator Rotation = Direction.Rotation();
+	FRotator Rotation2 = Direction2.Rotation();
+	FRotator Rotation3 = Direction3.Rotation();
 
 	if (Settings.FireProjectileNbr == 1)
 	{
@@ -109,11 +129,15 @@ void ACubeEnemy::SpawnProjectile(FVector Direction)
 		multipleProjectileSpawn.Add(Location);
 		multipleProjectileSpawn.Add(Location2);
 
+		multipleProjectileRotation.Add(Rotation);
+		multipleProjectileRotation.Add(Rotation2);
+
 		for (int i = 0; i < Settings.FireProjectileNbr; i++)
 		{
-			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], Rotation, Params);
+			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], multipleProjectileRotation[i], Params);
 		}
 		multipleProjectileSpawn.Empty();
+		multipleProjectileRotation.Empty();
 	}
 	else
 	{
@@ -121,11 +145,16 @@ void ACubeEnemy::SpawnProjectile(FVector Direction)
 		multipleProjectileSpawn.Add(Location2);
 		multipleProjectileSpawn.Add(Location3);
 
+		multipleProjectileRotation.Add(Rotation);
+		multipleProjectileRotation.Add(Rotation2);
+		multipleProjectileRotation.Add(Rotation3);
+
 		for (int i = 0; i < Settings.FireProjectileNbr; i++)
 		{
-			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], Rotation, Params);
+			GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, multipleProjectileSpawn[i], multipleProjectileRotation[i], Params);
 		}
 		multipleProjectileSpawn.Empty();
+		multipleProjectileRotation.Empty();
 	}
 
 }
