@@ -109,7 +109,7 @@ void APlayerCube::SubDamage(int dmg)
 		health -= dmg;
 		if (health <= 0)
 		{
-			Destroy();
+			health = 0;
 		}
 	}
 }

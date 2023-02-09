@@ -9,6 +9,6 @@ CDCM1,Float,,A étudier,Moyen > Petit,
 CDCM2,Float,,A étudier,Moyen > Gros,
 CDCG1,Float,,A étudier,Gros > Petit,
 CDCG2,Float,,A étudier,Gros > Moyen,
-MS,Float,"""1.25;1;0.75;1""",,,MouvementSpeedPetit
+MS,Float,"""2;1;0.75;1""",,,MouvementSpeedPetit
 WaveTime,Float,30,,,
 WaveEnemySpawn,Float,5,,,
