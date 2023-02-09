@@ -41,6 +41,7 @@ ACubeEnemy::ACubeEnemy()
 
 	ProjectileLocation3 = CreateDefaultSubobject<USceneComponent>("ProjectileLocation3");
 	ProjectileLocation3->SetupAttachment(ProjectileArrow);
+
 }
 
 // Called when the game starts or when spawned
@@ -100,8 +101,6 @@ void ACubeEnemy::HitScan(FVector Start, FVector Direction)
 void ACubeEnemy::SpawnProjectile()
 {
 	FActorSpawnParameters Params;
-
-	ACharacter* charA = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 
 	FVector LocationOrigin = ProjectileLocationOrigin->GetComponentLocation();
 	FVector Location = ProjectileLocation->GetComponentLocation();
@@ -180,6 +179,10 @@ void ACubeEnemy::SubDamage(int dmg)
 	health -= dmg;
 	if (health <= 0)
 	{
+		ACharacter* charA = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+		APlayerCube* playerCube = Cast<APlayerCube>(charA);
+
+		playerCube->SetScrap(scrapMetals);
 		Destroy();
 	}
 }

@@ -12,7 +12,7 @@ APlayerCube::APlayerCube()
 	PrimaryActorTick.bCanEverTick = true;
 
 	this->GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCube::OnActorBeginOverlap);
-	health = 3;
+	health = 6;
 	//Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
 
 	// Don't rotate when the controller rotates. Let that just affect the camera.

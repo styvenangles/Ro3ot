@@ -39,6 +39,12 @@ public:
 	void HitScan(FVector Start, FVector Direction);
 
 	UFUNCTION(BlueprintCallable, CallInEditor)
+		float SetScrap(float scrapMetals) { return scrapAmount += scrapMetals; };
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		float GetScrap() { return scrapAmount; };
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
 		int GetHp() { return health; };
 
 	void SubDamage(int dmg);
@@ -52,6 +58,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 		bool invulnerabiltyFrame = false;
+
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -72,6 +80,8 @@ protected:
 	int health;
 
 private:
+
+	float scrapAmount = 0.f;
 
 	UFUNCTION()
 		void OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

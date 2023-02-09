@@ -40,6 +40,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Shoot();
 
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		float SetScrap(float scrapIn) { return scrapMetals += scrapIn; };
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		float GetScrap() { return scrapMetals; };
+
+	UFUNCTION(BlueprintCallable, CallInEditor)
+		int GetHp() { return health; };
+
 	UFUNCTION(BlueprintCallable)
 		void SubDamage(int dmg);
 
@@ -90,6 +99,8 @@ public:
 private:
 	float FireTimer = 0.0f;
 	AFPS_Projectile* projectile = nullptr;
+
+	float scrapMetals = 0.f;
 
 	UFUNCTION()
 		void OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
