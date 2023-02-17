@@ -11,10 +11,20 @@
 #include "FPS_Projectile.h"
 #include "PlayerCube.generated.h"
 
+UENUM(BlueprintType)
+enum EShotType
+{
+	Semi = 0,
+	Auto
+};
+
 USTRUCT(BlueprintType)
 struct FShootSettings
 {
 	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		TEnumAsByte<EShotType> ShotType = Semi;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		float FireRate = 4.0f;
@@ -63,7 +73,8 @@ public:
 
 protected:
 	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;	
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 		USceneComponent* ProjectileLocation;

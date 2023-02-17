@@ -46,6 +46,17 @@ void APlayerCube::BeginPlay()
 	Super::BeginPlay();
 }
 
+void APlayerCube::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	FireTimer += DeltaTime;
+	if (FireTimer >= (1 / Settings.FireRate))
+	{
+		CanShoot = true;
+	}
+}
+
+
 void APlayerCube::SpawnProjectile(FVector Start, FVector Direction)
 {
 	FActorSpawnParameters Params;
