@@ -41,10 +41,11 @@ void AFPS_Projectile::Tick(float DeltaTime)
 
 void AFPS_Projectile::OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	PSettings.ParentClass = OtherActor->GetClass();
+
 	for (int i = 0; i < PSettings.FriendlyClass.Num(); i++)
 	{
-		/*UE_LOG(LogTemp, Warning, TEXT("OverlapedActor : %s"), *OtherActor->GetClass()->GetName());
-		UE_LOG(LogTemp, Warning, TEXT("FriendlyActor : %s"), *PSettings.FriendlyClass[i]->GetName());*/
+		/*UE_LOG(LogTemp, Warning, TEXT("OverlapedActor : %s"), *OtherActor->GetClass()->GetName());*/
 		if (PSettings.EnemyClass[i] == OtherActor->GetClass())
 		{
 			Destroy();

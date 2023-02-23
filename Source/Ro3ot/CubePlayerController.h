@@ -7,6 +7,8 @@
 #include "PlayerCube.h"
 #include "CubePlayerController.generated.h"
 
+DECLARE_DELEGATE_OneParam(FBooleanDelegate, bool)
+
 /**
  * 
  */
@@ -28,6 +30,6 @@ protected:
 private:
 	void MoveHorizontal(float value);
 	void MoveVertical(float value);
-	void Shoot();
+	void Shoot(bool TriggerIsPulled);
 	
 };

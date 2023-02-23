@@ -4,6 +4,7 @@
 #include "PlayerCube.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Kismet/KismetStringLibrary.h"
 
 // Sets default values
 APlayerCube::APlayerCube()
@@ -49,7 +50,7 @@ void APlayerCube::BeginPlay()
 void APlayerCube::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	FireTimer += DeltaTime;
+	FireTimer += DeltaSeconds;
 	if (FireTimer >= (1 / Settings.FireRate))
 	{
 		CanShoot = true;
@@ -66,19 +67,41 @@ void APlayerCube::SpawnProjectile(FVector Start, FVector Direction)
 	GetWorld()->SpawnActor<AFPS_Projectile>(Settings.ProjectileClass, Location, Rotation, Params);
 }
 
-void APlayerCube::Shoot()
+void APlayerCube::Shoot(bool TriggerIsPulled)
 {
+
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red,UKismetStringLibrary::Conv_BoolToString(TriggerIsPulled));
 	FVector Direction = this->GetActorForwardVector();
 	FVector Start = this->GetActorLocation() + (Direction * 100.0f);
 	FVector End = Start + Direction * InteractionMaxDistance;
 
-	if (IsValid(ProjectileLocation))
+	if (!TriggerIsPulled)
 	{
-		SpawnProjectile(Start, Direction);
+		TriggerHasBeenReleased = true;
+		return;
 	}
-	else
+
+	if (Settings.ShotType != Auto && !TriggerHasBeenReleased)
 	{
-		HitScan(Start, Direction);
+		return;
+	}
+
+	TriggerHasBeenReleased = false;
+
+	if (CanShoot)
+	{
+		if (Settings.ProjectileClass != nullptr)
+		{
+			SpawnProjectile(Start, Direction);
+		}
+		else
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("HitScan"));
+			HitScan(Start, Direction);
+		}
+
+		FireTimer = 0.0f;
+		CanShoot = false;
 	}
 }
 

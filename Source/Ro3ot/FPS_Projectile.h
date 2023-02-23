@@ -17,6 +17,9 @@ struct FProjectileSettings
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		TArray<TSubclassOf <AActor>> EnemyClass = { nullptr, nullptr, nullptr };
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+		TSubclassOf <AActor> ParentClass = nullptr;
 };
 
 UCLASS()

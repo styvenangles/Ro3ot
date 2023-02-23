@@ -29,7 +29,8 @@ void ACubePlayerController::SetupInputComponent()
 	InputComponent->BindAxis("Vertical", this, &ACubePlayerController::MoveVertical);
 	InputComponent->BindAxis("Horizontal", this, &ACubePlayerController::MoveHorizontal);
 
-	InputComponent->BindAction("Shoot", EInputEvent::IE_Pressed, this, &ACubePlayerController::Shoot);
+	InputComponent->BindAction<FBooleanDelegate>("Shoot", EInputEvent::IE_Pressed, this, &ACubePlayerController::Shoot, true);
+	InputComponent->BindAction<FBooleanDelegate>("Shoot", EInputEvent::IE_Released, this, &ACubePlayerController::Shoot, false);
 }
 
 void ACubePlayerController::MoveHorizontal(float value)
@@ -51,7 +52,7 @@ void ACubePlayerController::MoveVertical(float value)
 	}*/
 }
 
-void ACubePlayerController::Shoot()
+void ACubePlayerController::Shoot(bool TriggerIsPulled)
 {
-	Cube->Shoot();
+	Cube->Shoot(TriggerIsPulled);
 }

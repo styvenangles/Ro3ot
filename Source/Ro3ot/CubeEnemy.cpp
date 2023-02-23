@@ -183,6 +183,7 @@ void ACubeEnemy::SubDamage(int dmg)
 		APlayerCube* playerCube = Cast<APlayerCube>(charA);
 
 		playerCube->SetScrap(scrapMetals);
+		playerCube->ManageBerserk();
 		Destroy();
 	}
 }

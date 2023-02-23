@@ -23,17 +23,20 @@ struct FShootSettings
 {
 	GENERATED_USTRUCT_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		TEnumAsByte<EShotType> ShotType = Semi;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		float FireRate = 4.0f;
+public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		TEnumAsByte<EShotType> ShotType = Semi;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		float MaxDistance = 10000.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 		TSubclassOf <AFPS_Projectile> ProjectileClass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		float FireRate = 4.0f;
 };
 
 UCLASS()
@@ -44,7 +47,7 @@ class RO3OT_API APlayerCube : public ACharacter
 public:
 	// Sets default values for this character's properties
 	APlayerCube();
-	void Shoot();
+	void Shoot(bool TriggerIsPulled);
 	void SpawnProjectile(FVector Start, FVector Direction);
 	void HitScan(FVector Start, FVector Direction);
 
@@ -57,6 +60,9 @@ public:
 	UFUNCTION(BlueprintCallable, CallInEditor)
 		int GetHp() { return health; };
 
+	UFUNCTION(BlueprintImplementableEvent)
+		void ManageBerserk();
+
 	void SubDamage(int dmg);
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -65,6 +71,9 @@ public:
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UCameraComponent* FollowCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+		FShootSettings Settings = FShootSettings();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Interaction")
 		bool invulnerabiltyFrame = false;
@@ -79,9 +88,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Component")
 		USceneComponent* ProjectileLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
-		FShootSettings Settings = FShootSettings();
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
 		float InteractionMaxDistance = 10000.0f;
 
@@ -92,7 +98,9 @@ protected:
 
 private:
 
-	float scrapAmount = 0.f;
+	bool CanShoot = false, TriggerHasBeenReleased = true;
+
+	float scrapAmount = 0.f, FireTimer = 0.f;
 
 	UFUNCTION()
 		void OnActorBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
