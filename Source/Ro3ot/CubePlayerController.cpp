@@ -33,6 +33,15 @@ void ACubePlayerController::SetupInputComponent()
 	InputComponent->BindAction<FBooleanDelegate>("Shoot", EInputEvent::IE_Released, this, &ACubePlayerController::Shoot, false);
 }
 
+void ACubePlayerController::Tick(float DeltaSeconds)
+{
+	if(isPressed)
+	{
+		Cube->Shoot(isPressed);
+	}
+}
+
+
 void ACubePlayerController::MoveHorizontal(float value)
 {
 	/*if (Cube != nullptr) {
@@ -54,5 +63,5 @@ void ACubePlayerController::MoveVertical(float value)
 
 void ACubePlayerController::Shoot(bool TriggerIsPulled)
 {
-	Cube->Shoot(TriggerIsPulled);
+	isPressed = TriggerIsPulled;
 }

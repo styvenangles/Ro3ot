@@ -27,7 +27,7 @@ struct FShootSettings
 public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-		TEnumAsByte<EShotType> ShotType = Semi;
+		TEnumAsByte<EShotType> ShotType = Auto;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon")
 		float MaxDistance = 10000.0f;

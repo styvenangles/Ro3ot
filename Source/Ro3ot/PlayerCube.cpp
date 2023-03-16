@@ -69,8 +69,9 @@ void APlayerCube::SpawnProjectile(FVector Start, FVector Direction)
 
 void APlayerCube::Shoot(bool TriggerIsPulled)
 {
-
-	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red,UKismetStringLibrary::Conv_BoolToString(TriggerIsPulled));
+	FString stringDebug = UKismetStringLibrary::Conv_BoolToString(TriggerIsPulled);
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *stringDebug);
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Blue, UKismetStringLibrary::Conv_BoolToString(TriggerIsPulled));
 	FVector Direction = this->GetActorForwardVector();
 	FVector Start = this->GetActorLocation() + (Direction * 100.0f);
 	FVector End = Start + Direction * InteractionMaxDistance;
